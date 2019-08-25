@@ -1,0 +1,244 @@
+---
+title: "D.U.R.T."
+author: "Nico Manzonelli and Mason Krueger"
+output:
+  html_document: default
+  pdf_document: default
+---
+<style type="text/css">
+
+h1.title {
+  font-size: 38px;
+  color: Black;
+  text-align: center;
+}
+h4.author {
+  font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: Black;
+  text-align: center;
+}
+</style>
+<center>
+### Derogatory Use of Regular Text
+
+  The internet is forever. Everything you have ever instagramed, facebooked, or tweeted can be held against you. In todays' soceity, old tweets come to haunt young professionals. The Derogatory Use of Regular Text can ruin lifes. We developed an app that digs up the D.U.R.T., on any public twitter account. Follow the link below to our app.
+
+https://community-5c5b2f2d3b23e67dbf8b8cce-5cd2489a9d590da2f75e87d8.platform.matrixds.com/
+
+Video presentation.
+
+https://www.youtube.com/watch?v=HhcllVmq4os&feature=youtu.be 
+  
+</center>
+
+******
+
+### Base D.U.R.T. Function
+
+  The base of our app comes from a function that scrapes a twitter users timeline for any use of derogatory language. To gain acesses to user's timelines we applied for a twitter API and used the package rtweet. Additionally, we created a list of derogatory words to filter tweets by.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+
+library(rtweet) # refrence the rtweet package
+library(tidyverse)
+library(tidytext) #refrences some other required packages
+
+APIkey <- "bGX8l5k6rYKMVwiKulsIjfNUK"
+APIcode <- "V8sSfll7wrgJxcHNnyCW7xcsNNxN8xjE6VJ21jLNkVqthacofK"
+token <- "1120751845213974528-pEBExgwOIk9q4IfQrdbRdFnGGLwRcU"
+tokencode <- "7vQvSGvEBWav52EdPcQJC00R97hn11eTa4ko82GcYzvbz"
+
+create_token( app = "DURT", APIkey, APIcode, token, tokencode) #this code accesses our twitter API. Authorization below.
+
+durtwords <- c('bitch','bitches','Bitch','Bitches', 'bitched','fuck', 'Fuck', 'FUCK', 'fucking', 'fucked', 'fucker', 'Fucked', 'Fucker', 'Fuckers', 'Cunt', 'cunt', 'CUNT', 'fag','FAG','Fag', 'faggot', 'Faggot', 'faggit', 'Faggit', 'Faggot', 'NIGGER','Nigger', 'nigger', 'Nigga', 'NIGGA', 'Nigga', 'Ass', 'ass', 'ASS', 'Bastard', 'BASTARD',
+'bastard', 'Slut', 'SLUT', 'slut', 'WHORE', 'Whore', 'whore', 'skank', 'Skank', 'WHORE', 'porn', 'Porn', 'PORN', 'Vagina', 'VAGINA', 'vagina', 'dick', 'Dick', 'DICK', 'Pussy', 'PUSSY', 'pussy', 'penis', 'Penis', 'PENIS','Gay', 'GAY', 'gay','NIGGERS', 'niggas', 'niggers', 'NIGGAS', 'Gay', 'gays', 'GAYS', 'Gays', 'fags', 'Fags', 'Faggots','shit', 'SHIT', 'Shit', 'Shits', 'shits', 'Mexican', 'mexican', 'mexicans', 'Mexicans', 'Jew', 'Jews', 'jew', 'jews', 'spic', 'COCK', 'cock', 'cocks', 'Cock','retard', 'Retard', 'Retarded','retarded', 'chode', 'Chode', 'Cum', 'CUM', 'cum', 'Weed', 'weed', 'crack', 'Crack', 'Coke', 'coke', 'blow', 'Blow', 'ayo', 'yayo','alc', 'beer','Beer', 'Twat', 'twat', 'TWAT', 'prick', 'Prick', 'FUCKER', 'clit', 'Clit', 'CLIT', 'Jizz', 'jizz', 'sex', 'Sex', 'SEX', 'queef', 'Queef',
+'blowjob', 'Blowjob', 'handjob', 'Handjob', 'choad', 'Choad', 'Tits', 'tits', 'TITS', 'Titties', 'titties', 'tiddies', 'Boobs', 'boobs', 'balls', 'Balls', 'ballsack', 'Ballsack', 'Piss', 'piss', 'Taint', 'taint', 'Pubes', 'pubes', 'nutsack', 'Nutsack', 'Spick', 'Spick', 'wetback', 'Terrorist', 'terrorist', 'LSD', 'Acid', 'acid', 'Nazi', 'nazi', 'NAZIS', 'NAZI', 'nazis', 'Dyke', 'dyke', 'Dike', 'dike', 'Coon', 'coon', 'COON', 'DIKE', 'DYKE', 'queer', 'Queer', 'trans', 'tranny','Tranny', 'NIG', 'nig', 'Nig', 'Lesbian', 'lesbian', 'Lesbo', 'lesbian', 'Redneck', 'redneck', 'Raghead', 'raghead', 'fat', 'FAT', 'Fat', 'towelhead', 'Towelhead', 'blunt', 'Blunt', 'Joint', 'joint') #defining durty words
+
+getdurt <- function(name) {
+  
+tweets <- get_timeline(name , n = 100000)
+
+durt <- tweets %>%
+  select(status_id, text) %>%
+  unnest_tokens(word, text) %>%
+  filter(word %in% durtwords) %>%
+  select(status_id) %>%
+  left_join(tweets, durt, by = NULL)
+
+data.frame(durt)
+} #defining the base function. this function does the gritty work for our app.
+
+```
+
+*****
+
+### Applying D.U.R.T.
+
+  Aside from creating the app, we applied our base function to conduct research. Folowing the trend of athletes who fall into trouble over old tweets, We used D.U.R.T. to analyze the top 50 highscool football recruits and top 50 2019 NFL draft picks. Coincidentally, all of whom have public twitters. By applying D.U.R.T. to this sample of athletes, we learn a lot about our star athletes. The R code below reads the data we created by running the base DURT function to the lists of athletes' twitter acounts.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center'}
+
+top50highschool <- c('SmithNoland2', 'kayvonT8', 'JrStingley', 'jadon_haselwood', 'Antonioalfano99', '6sixGod_', 'ENeal73', 'ZP62019', 'buhbuhbru', 'darnell_5232', 'SpencerRattler','zacharrison_', 'Emery4____',  'daxhill5', 'K_Green_01', 'boimarv9', 'loganbrown53', 'brand0n_smith12', 'KobeDean2', 'GarrettWilson_V', '_TheoWeaseJr','D1Figure_', 'andrewbooth21', 'geo_Thagoat', 'opfreak15', 'claywebbG3', 'CharlesCross67', 'wanyamorris64', 'ealy_1k', 'h_miller76', 'Thechrishinton','MarcelBrooks_5', 'bo_nix10', 'J_Whitt3', 'JayD__5', 'domblaylock_1', 'dreamchaserTy10', 'Ford_Kyle6', '_FrankLadson', 'PierceQuick', '_mykael2','KinggChris7', 'jordantofly100', 'HenryTootoo1', 'LewisCine', 'zachcharbon', 'isopsher', 'Easymoney_Kai', 'jakesmith27', 'DoItAllDent103')
+
+top50draft <- c('TheKylerMurray', 'nbsmallerbear', 'QuinnenWilliams' ,'Cle_Missile' ,'DevinWhite__40' ,'Daniel_Jones10' ,'JoshAllen41_' ,'TheeHOCK8' ,'Edoliver_11' ,'_Dbush11' ,'JonahGWilliams','RashanAGary','cwilkins42' ,'Big_Fish75','dh_simba7' ,'Fire_Burns99','llawrence2139','Gbradbury_11','GrindSimmons94','nrfant','darnellsavage_' ,'AndreDillard_','levelstothis_2' ,'iAM_JoshJacobs' ,'Primetime_jet' ,'_sweat9','JohnathanAbram1','JerryTillery','ljcollier91','DreBaker1_','KalebMcgary','NkealHarry15','byronmurphy','Rock_152','jawaan_taylor74','Uno_Captain','Thegreglittle','Cody_Ford74','MrSeanyB1','MullenIsland1','DaltonBigD71','DrewLock23','tavai31','Big_E_14','JoejuanW','Greedy','Erik_McCoy_73','benbanogu','swervinirvin_')
+
+#created lists with top 50 highscoolers and top 50 drafties
+
+hsdurt <- read_csv('highschooldurt.csv')
+draftdurt <- read_csv('draftdurt.csv')
+
+hsdurtclean <- hsdurt %>%
+select(created_at, screen_name, name, location, status_url, text, is_retweet, favorite_count, retweet_count, retweet_name, retweet_location, profile_image_url)
+
+draftdurtclean <- draftdurt %>%
+select(created_at, screen_name, name, location, status_url, text, is_retweet, favorite_count, retweet_count, retweet_name, retweet_location, profile_image_url)
+
+#cleaned the data
+```
+
+******
+
+### Who is the DURTiest?
+
+  The following code creates a facet plot that shows the top 10 DURTiest atheletes. These athletes use the most profanity in their tweets. The graph tells us that most NFL drafties use significantly more DURT in their tweets than the top highschool recruits. We believe this is due to most NFL drafites having older twitter accounts. Becuase of the age of their accounts, NFL drafties were likley less careful with their word choice before they knew the ramifications of DURT.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center'}
+
+hsdurtiest <- hsdurtclean %>%  
+  group_by(screen_name) %>%
+  count(name) %>%
+  arrange(-n) %>%
+  mutate(level = 'Top Highschool')
+hsdurtiest <- hsdurtiest[1:10,]
+
+draftdurtiest <- draftdurt %>%
+  group_by(screen_name) %>%
+  count(name) %>%
+  arrange(-n) %>%
+  mutate(level = 'Top Drafted')
+draftdurtiest <- draftdurtiest[1:10,]
+
+alldurtiest <- rbind(hsdurtiest, draftdurtiest)
+
+#data cleaning and combining
+
+#install.packages('plotly')
+library(plotly)  #refrence plotly package to display plots
+
+durtiestplayers <- ggplot(alldurtiest, aes(x = reorder(screen_name, n), y = n)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~level) +
+  coord_flip() +
+  theme_minimal() + xlab('') + ylab('DURTy Tweet Count') +
+  ggtitle('Top DURTiest Athletes') + theme(plot.title = element_text(hjust = 0.5)) #build ggplot
+
+#install.packages('shiny')
+library(shiny) #refrencing shiny to center plotly. Recomended by Martin Schmelzer on stackoverflow.
+
+div(ggplotly(durtiestplayers))  #calling the graph with plotly
+
+```
+
+******
+
+### How old are DURTy tweets?
+
+  We decided to test our belief that NFL drafties have significantly older DURT than the top highschool recruits. The following code displays a timeline of DURTy tweets.
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE, fig.align='center'}
+
+hsdurtydate <- hsdurtclean %>%
+  separate(created_at, into = 'Date', sep = ' ') %>%
+  separate(Date, into = c('year', 'month'), sep = '-' ) %>%
+  unite('year_month', c('year', 'month'), sep =  '-') %>%
+  group_by(year_month) %>%
+  count(year_month) %>%
+  mutate(level = 'Highschool')
+
+draftdurtydate <- draftdurtclean %>%
+  separate(created_at, into = 'Date', sep = ' ') %>%
+  separate(Date, into = c('year', 'month'), sep = '-' ) %>%
+  unite('year_month', c('year', 'month'), sep =  '-') %>%
+  group_by(year_month) %>%
+  count(year_month) %>%
+  mutate(level = 'Drafted')
+
+durt_dates <- rbind(draftdurtydate, hsdurtydate)
+#cleaned data
+
+Timeline <- ggplot(durt_dates, aes(alpha = 1/5)) + geom_point(aes(x = year_month, y = level, size = n, color = level)) + theme(plot.title = element_text(hjust = .5), axis.text = element_blank(), axis.ticks = element_blank()) + ggtitle('DURTy Tweet Timeline') + xlab('Time') + ylab('') + theme(legend.position="bottom", legend.box = "horizontal") #creating the graph. Refrenced rdrr.io to clean up axis.
+
+
+div(ggplotly(Timeline) %>%
+  layout(legend = list(orientation = "h", x = 0.375, y = -0.2))) #refrence tbradley to move legend below plotly from github issues
+
+```
+
+******
+
+### Which DURTy words are used the most?
+
+  The following wordcloud displays the DURTy words used most often from both athlete groups. These words were used over 2000 times. While somewords are not as bad when used in context, most words included are unprofessional and unexeceptable irregardless of context. 
+  
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,fig.align='center',out.width = '50%'}
+
+library(wordcloud) #refrencing package wordcloud
+library(tm) #refrencing pacakge tm
+
+hsmostwords <- hsdurtclean %>%
+  unnest_tokens(word, text) %>%
+  filter(word %in% durtwords) %>%
+  select(word)
+draftmostwords <- draftdurtclean %>%
+  unnest_tokens(word, text) %>%
+  filter(word %in% durtwords) %>%
+  select(word)
+
+allmostdurt <- rbind(hsmostwords, draftmostwords)
+# cleaned and combined data
+
+wordcloud(words = allmostdurt$word, min.freq = 1, max.words = Inf, random.order = FALSE) #created wordcloud
+
+```
+
+For a more exact comparison refrence the bar chart below.
+
+```{r, message=FALSE, warning=FALSE, paged.print=FALSE, fig.align= 'center'}
+
+allmostdurtplot <- allmostdurt %>%
+  count(word)
+# aggregated data
+
+mostused <- ggplot(allmostdurtplot, aes(x = reorder(word, n), y = n)) + geom_bar(stat = 'identity') + coord_flip() + theme_minimal(base_size = 8.5) + xlab('') + ylab('Word Count') + theme(plot.title = element_text(hjust = 0.5)) + ggtitle('Most Used DURTy Words') 
+
+div(ggplotly(mostused))
+
+```
+
+
+*****
+<br><br>
+
+### Accuracy & Context
+
+  To test the extent that our DURT function accounts for context of the tweet, we randomly sampled 100 data points. Of these data points, only 8% were taken completely out of context. The other 92% were derogatory or unprofessional. Because our list of derogatory terms is expansive and generally consists of all negative terms, context does not drastically effect our results. Therefore, the research on top football atheletes is accurate.
+
+*****
+
+### Refrences
+
+As cited throughout my code, I refrenced the following sources.
+
++ https://rtweet.info/
++ https://github.com/ropensci/plotly/issues/1049
++ https://stackoverflow.com/questions/47193192/r-markdown-and-plotly-fig-align-not-working-with-html-output
++ https://rdrr.io/cran/ggpubr/man/rremove.html 
++ http://www.sthda.com/english/wiki/text-mining-and-word-cloud-fundamentals-in-r-5-simple-steps-you-should-know#step-1-create-a-text-file
++ https://stackoverflow.com/questions/43404487/how-do-i-center-my-yaml-heading-in-an-r-markdown-html-document
++ https://cran.r-project.org/web/packages/wordcloud/index.html
++ http://shiny.rstudio.com/gallery/
++ https://shiny.rstudio.com/articles/datatables.html
++ https://stackoverflow.com/questions/50429119/sidebarmenu-does-not-function-properly-when-using-includehtml/50820737#50820737 
+
+
