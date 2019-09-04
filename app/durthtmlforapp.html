@@ -116,7 +116,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">D.U.R.T.</h1>
-<h4 class="author"><em>Nico Manzonelli and Mason Krueger</em></h4>
+<h4 class="author"><em></em></h4>
 
 </div>
 
@@ -138,7 +138,7 @@ h4.author {
 <hr />
 <div id="base-d.u.r.t.-function" class="section level3">
 <h3>Base D.U.R.T. Function</h3>
-<p>The base of our app comes from a function that scrapes a twitter users timeline for any use of derogatory language. To gain acesses to user’s timelines we applied for a twitter API and used the package rtweet. Additionally, we created a list of derogatory words to filter tweets by.</p>
+<p>D.U.R.T. relys on a base function that scrapes a twitter users timeline for any use of derogatory language. To gain acesses to user’s timelines I use a twitter developer API and the package rtweet. Additionally, I created a list of derogatory words to filter tweets by.</p>
 <pre class="r"><code>library(rtweet) # refrence the rtweet package
 library(tidyverse)
 library(tidytext) #refrences some other required packages
@@ -201,7 +201,7 @@ select(created_at, screen_name, name, location, status_url, text, is_retweet, fa
 </div>
 <div id="who-is-the-durtiest" class="section level3">
 <h3>Who is the DURTiest?</h3>
-<p>The following code creates a facet plot that shows the top 10 DURTiest atheletes. These athletes use the most profanity in their tweets. The graph tells us that most NFL drafties use significantly more DURT in their tweets than the top highschool recruits. We believe this is due to most NFL drafites having older twitter accounts. Becuase of the age of their accounts, NFL drafties were likley less careful with their word choice before they knew the ramifications of DURT.</p>
+<p>The following code creates a facet plot that shows the top 10 DURTiest atheletes. These athletes use the most profanity in their tweets. The graph tells us that most NFL drafties use significantly more DURT in their tweets than the top highschool recruits.</p>
 <pre class="r"><code>hsdurtiest &lt;- hsdurtclean %&gt;%  
   group_by(screen_name) %&gt;%
   count(name) %&gt;%
@@ -234,7 +234,7 @@ ggplot(alldurtiest, aes(x = reorder(screen_name, n), y = n)) +
 </div>
 <div id="how-old-are-durty-tweets" class="section level3">
 <h3>How old are DURTy tweets?</h3>
-<p>We decided to test our belief that NFL drafties have significantly older DURT than the top highschool recruits. The following code displays a timeline of DURTy tweets.</p>
+<p>To test the belief that NFL drafties have significantly older DURT than the top highschool recruits. The following code displays a timeline of DURTy tweets.</p>
 <pre class="r"><code>hsdurtydate &lt;- hsdurtclean %&gt;%
   separate(created_at, into = 'Date', sep = ' ') %&gt;%
   separate(Date, into = c('year', 'month'), sep = '-' ) %&gt;%
@@ -260,7 +260,7 @@ ggplot(durt_dates, aes(alpha = 1/5)) + geom_point(aes(x = year_month, y = level,
 </div>
 <div id="which-durty-words-are-used-the-most" class="section level3">
 <h3>Which DURTy words are used the most?</h3>
-<p>The following wordcloud displays the DURTy words used most often from both athlete groups. These words were used over 2000 times. While somewords are not as bad when used in context, most words included are unprofessional and unexeceptable irregardless of context.</p>
+<p>The following wordcloud displays the DURTy words used most often from both athlete groups. These words were used over 2000 times. While somewords are not as bad when used in their context, most words included are unprofessional and unexeceptable irregardless of context.</p>
 <pre class="r"><code>library(wordcloud) #refrencing package wordcloud
 library(tm) #refrencing pacakge tm
 
@@ -289,11 +289,11 @@ ggplot(allmostdurtplot, aes(x = reorder(word, n), y = n)) + geom_bar(stat = 'ide
 </div>
 <div id="accuracy-context" class="section level3">
 <h3>Accuracy &amp; Context</h3>
-<p>To test the extent that our DURT function accounts for context of the tweet, we randomly sampled 100 data points. Of these data points, only 8% were taken completely out of context. The other 92% were derogatory or unprofessional. Because our list of derogatory terms is expansive and generally consists of all negative terms, context does not drastically effect our results. Therefore, the research on top football atheletes is accurate.</p>
+<p>To check the extent that context may skew results, we randomly sampled 100 data points. Of these data points, only 8% were taken completely out of context. The other 92% were derogatory or unprofessional. Because our list of derogatory terms is expansive and generally consists of all negative terms, context does not drastically effect our results. Therefore, the research on top football atheletes is generally accurate.</p>
 <hr />
 <div id="refrences" class="section level5">
 <h5>Refrences</h5>
-<p>As cited throughout my code, I refrenced the following sources.</p>
+<p>As cited throughout my code, I refrenced the following sources. Additionally, Mason Kreuger (USMA '21) provided me with feedback and assistance throughouttthis preliminary study.</p>
 <ul>
 <li><a href="https://rtweet.info/" class="uri">https://rtweet.info/</a></li>
 <li><a href="https://github.com/ropensci/plotly/issues/1049" class="uri">https://github.com/ropensci/plotly/issues/1049</a></li>
