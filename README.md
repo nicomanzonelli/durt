@@ -2,8 +2,10 @@
 
 Search Twitter for the Derogatory Use of Ordinary Text
 
-<a href = 'https://google.com'>Link to the app</a>
+<a href = durt.dse-app.com> durt.dse-app.com</a>
 
 ## What is DURT?
 
-The internet is forever. In todays' soceity, old tweets come to haunt young professionals. The Derogatory Use of Regular Text can ruin lifes. D.U.R.T. is a powerful search engine that allows its users to scrape through tweets posted on different Twitter profiles. This Shiny app utilizes R-Studio coding, in coalition with a Twitter dev API, to analyze a large quantity of data from Twitter.
+DURT is a R Shiny application that allows the user to check twitter accounts for potentially unprofessional, derogatory, or otherwise offensive content. It also provides a general look at their overall twitter use. DURT makes a provides a straightforward open source solution designed to allow individuals or organizations to screen twitters.
+
+This is the repository for the R used to create the app. 

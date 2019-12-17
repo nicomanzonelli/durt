@@ -23,28 +23,33 @@ durtwords <- c('bitch','bitches','Bitch','Bitches', 'bitched','fuck', 'Fuck', 'F
                'trans', 'tranny','Tranny', 'NIG', 'nig', 'Nig', 'Lesbian', 'lesbian', 'Lesbo', 'lesbian', 'Redneck', 'redneck', 'Raghead', 'raghead', 'fat', 'FAT', 'Fat',
                'towelhead', 'Towelhead', 'blunt', 'Blunt', 'Joint', 'joint')
 
+
+durtdictionary <- tolower(durtwords)
+durtdictionary <- unique(durtdictionary)
+
 getdurt <- function(name) {
   
 tweets <- get_timeline(name , n = 100000)
 
 durt <- tweets %>%
-  select(status_id, text) %>%
+  select(status_id, text)%>%
+  mutate(text = tolower(text)) %>%
+  mutate(text = gsub("[[:punct:]]", " ", text)) %>%
   unnest_tokens(word, text) %>%
-  filter(word %in% durtwords) %>%
+  filter(word %in% durtdictionary) %>%
   select(status_id) %>%
   left_join(tweets, durt, by = NULL)
 
 data.frame(durt)
 }
 
-
+   
 durt <- getdurt('dreamchaserTy10')
+
+
 
 highschooldurt <- getdurt(top50highschool)
 draftdurt <- getdurt(top50draft)
-
-durt$status_url  
-
 
 top50highschool <- c('SmithNoland2', 'kayvonT8', 'JrStingley', 'jadon_haselwood', 'Antonioalfano99', '6sixGod_', 'ENeal73', 'ZP62019', 'buhbuhbru', 'darnell_5232', 'SpencerRattler',
                       'zacharrison_', 'Emery4____',  'daxhill5', 'K_Green_01', 'boimarv9', 'loganbrown53', 'brand0n_smith12', 'KobeDean2', 'GarrettWilson_V', '_TheoWeaseJr',

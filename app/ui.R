@@ -1,32 +1,57 @@
-.libPaths( c( .libPaths(), "/srv/.R/library") )   
+ui = navbarPage('D.U.R.T.',
+                
+                tabPanel('Dig',              
+                         tags$head(
+                           tags$script("!function(d,s,id){var js,fjs=d.getElementsByTagName(s)    [0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');")
+                         ),
+                         h1('Dig D.U.R.T.', align = 'center'),
+                         h5(em('Derogatory Use of Regular Text'), align = 'center'),
+                         fluidRow(column(12, align = 'center', textInput('user', label = '', value = NULL, placeholder = 'enter user @'))),
+                         fluidRow(column(12, align = 'center', actionButton('go_button', label = 'Dig DURT'))),
+                         br(), br(),
+                         h5(textOutput('text'), align = 'center'),
+                         uiOutput('html_tweets') %>% withSpinner()
+                         
+                         
+                ),
+                tabPanel('Drill',
+                         fluidPage(
+                           h1('Drill Into DURT', align = 'center'),
+                           h5('Select specific tweets in the tweet table based on their overall attitude, durtiness, or date.', align = 'center'),
+                           fluidRow(
+                             column(6,
+                                    h3('Tweet Table'),
+                                    DT::dataTableOutput('table1')),
+                             column(6, 
+                                    htmlOutput('htmltable')))
+                           
+                         )),
+                
+                tabPanel('Analyze',
+                         fluidPage(
+                           h1('Account Breakdown', align = 'center'),
+                           h5('Analyze and visualize account DURT and overall Twitter use.', align = 'center'),
+                           fluidRow(
+                             column(6,
+                                    plotOutput('pieplot'),
+                                    plotOutput('wordfreq')
+                             ),
+                             column(6,
+                                    plotOutput('cloud'),
+                                    plotOutput('wordfreqd')
+                                    
+                             ),
+                           ),
+                           fluidRow(plotlyOutput('plotly'), width = 1),
+                         )),
+                
+                tabPanel('Download',
+                         h1("Download the Data", align = 'center'),
+                         h5("Select the the number of tweets you wish to sample and download the raw data.", align = 'center'),
+                         fluidRow(column(12, align = 'center', downloadButton("downloadData","Download"))),
+                         fluidRow((column(12, align = 'center', sliderInput("slide", "", min = 0, max = 1000, value = 500)))),
+                         h5(""),
+                         DT::DTOutput('tbl') %>% withSpinner())
+                
+)
 
-library(shinycssloaders)
-
-shinyUI(navbarPage('D.U.R.T.',
-                   
-  tabPanel('Dig',
-           h1('Dig D.U.R.T.', align = 'center'),
-           h5(em('Derogatory Use of Regular Text'), align = 'center'),
-           textInput('user', label = '', value = NULL, placeholder = 'enter user @', width = '100%'),
-           actionButton('go_button', label = 'Dig DURT'),
-           br(), br(),
-           DT::DTOutput('tbl') %>% withSpinner(),
-           h5(textOutput('text'), align = 'center')
-           ),
-  
-  tabPanel('About', 
-           h1('About D.U.R.T.', align = 'center'),
-           h5(em('Derogatory Use of Regular Text'), align = 'center'),
-           h5("The internet is forever. Everything you have ever instagramed, facebooked, or tweeted can be held against you. In todays' soceity, old tweets come to haunt young professionals. The Derogatory Use of Regular Text can ruin lifes. D.U.R.T. is a powerful search engine that allows its users to scrape through tweets posted on different Twitter profiles. This Shiny app utilizes R-Studio coding, in coalition with a Twitter API, to analyze a large quantity of data from Twitter."),
-           h5(''),
-           h5(em('This app may need to be refreshed before reuse and it cannot handle many users at once'), align = 'center')
-           ),
-  
-  tabPanel('Research',
-           h1('D.U.R.T. for Research', align = 'center'),
-           h5('We conducted simple research included in the report below.', align = 'center'),
-           shiny::includeHTML('durthtmlforapp.html')
-           
-           )
-  
-)) 
