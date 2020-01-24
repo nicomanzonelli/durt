@@ -62,12 +62,12 @@ library(tidyverse)
 #install.packages("tidytext")
 library(tidytext)
 
-APIkey <- "bGX8l5k6rYKMVwiKulsIjfNUK"
-APIcode <- "V8sSfll7wrgJxcHNnyCW7xcsNNxN8xjE6VJ21jLNkVqthacofK"
-token <- "1120751845213974528-pEBExgwOIk9q4IfQrdbRdFnGGLwRcU"
-tokencode <- "7vQvSGvEBWav52EdPcQJC00R97hn11eTa4ko82GcYzvbz"
+APIkey <- ""
+APIcode <- ""
+token <- ""
+tokencode <- ""
 
-create_token( app = "DURT", APIkey, APIcode, token, tokencode)
+create_token( app = "", APIkey, APIcode, token, tokencode)
 
 durtwords <- c('bitch','bitches','Bitch','Bitches', 'bitched','fuck', 'Fuck', 'FUCK', 'fucking', 'fucked', 'fucker', 'Fucked', 'Fucker', 'Fuckers', 'Cunt', 'cunt', 'CUNT', 'fag',
                'FAG','Fag', 'faggot', 'Faggot', 'faggit', 'Faggit', 'Faggot', 'NIGGER','Nigger', 'nigger', 'Nigga', 'NIGGA', 'Nigga', 'Ass', 'ass', 'ASS', 'Bastard', 'BASTARD',

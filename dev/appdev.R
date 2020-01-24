@@ -11,12 +11,12 @@ library(httr)
 library(qdapTools)
 
 
-APIkey <- "hAgbJjvF1pzlp9Oal5PnjKo1Z"
-APIcode <- "TvPg4eSocDHO10HbcI0QcTrI4QKXf2DB0FwLPAtQgzGIYcVQpD"
-token <- "1120751845213974528-ZY3Js2dkozOmgQgpEs6Rzjx4ktrVw9"
-tokencode <- "BmT5WA0PEWrcHv8AFcAsnQJuRYxNKVyTBzhOapR4GSPiz"
+APIkey <- ""
+APIcode <- ""
+token <- ""
+tokencode <- ""
 
-create_token( app = "DURT", APIkey, APIcode, token, tokencode)
+create_token( app = "", APIkey, APIcode, token, tokencode)
 
 durtdict <- read.csv('durtdict.csv')
 
