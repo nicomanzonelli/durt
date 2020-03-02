@@ -9,7 +9,9 @@ library(shinycssloaders)
 library(mongolite)
 library(httr)
 library(qdapTools)
-
+library(plotly)
+library(wordcloud)
+library(tm) 
 
 APIkey <- ""
 APIcode <- ""
@@ -106,8 +108,6 @@ make_pie <- function(df){
 }
 
 make_wcloud <- function(df){
-  library(wordcloud)
-  library(tm) 
   
   dfdurt <- df %>%
     filter(durt_val > 0) %>%
